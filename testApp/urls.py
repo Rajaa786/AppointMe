@@ -1,13 +1,14 @@
 from django.contrib import admin
-from django.urls import path ,include
+from django.urls import path, include
 
 from testApp import views
 
 urlpatterns = [
-    path('',views.index,name='testApp'),
-    path('dr/',views.doctor,name='testApp'),
-    path('patient/',views.patient,name='testApp'),
-    path('Login/',views.Login, name='testApp'),
-    path('Register/',views.Register, name='testApp'),
-    
+    path('', views.index, name='home'),
+    path('dr/', views.doctor, name='doctor'),
+    path('patient/', views.patient, name='patient'),
+    path('Login/', views.Login, name='login'),
+    path('Register/', views.Register, name='register'),
+    path('Logout/', views.Logout_, name='logout'),
+
 ]
