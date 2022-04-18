@@ -31,7 +31,22 @@ class MyUser(AbstractUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=False)
-    role = models.CharField(max_length=20, choices=ROLES, default='patient')
+    role = models.CharField(max_length=20, choices=ROLES, default='Patient')
 
     def __str__(self):
         return "{}".format(self.user.username)
+
+
+class Appointments(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
+    desc = models.CharField(max_length=1000, blank=True)
+    emailField = models.EmailField()
+    contact = models.CharField(
+        _("Phone No"), max_length=12)
+    time = models.DateTimeField()
+
+
+class AppointmentMade(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
+    appointment = models.ForeignKey(
+        Appointments, on_delete=models.CASCADE, null=False)

@@ -65,12 +65,12 @@ Here{%endblock title %} {% block content %}
 
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <label class="input-group-text" for="inputGroupSelect01">Role</label>
+        <label class="input-group-text" for="selectInput">Role</label>
       </div>
-      <select class="custom-select" id="inputGroupSelect01">
+      <select class="custom-select" id="selectInput" name = "selectInputData" required>
         <option selected>Choose...</option>
-        <option value="patient">Patient</option>
-        <option value="doctor">Doctor</option>
+        <option value="Patient">Patient</option>
+        <option value="Doctor">Doctor</option>
       </select>
     </div>
 

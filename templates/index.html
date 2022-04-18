@@ -21,23 +21,42 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <li class="nav-item mx-3">
+            <a class="nav-link active rounded-pill bg-warning text-dark px-5" aria-current="page" href="/">Home</a>
           </li>
-         <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>-->
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/dr">Doctor</a>
+        {% if user.is_authenticated and request.user.userprofile.role == 'Patient' %}
+          <li class="nav-item mx-3">
+            <a class="nav-link active rounded-pill bg-warning text-dark px-5" aria-current="page" href="/patient">
+              Book Slot
+            </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/patient">Patients</a>
-          </li>
+        
+          {% comment %} <li class="nav-item">
+            <a class="nav-link active rounded-pill bg-warning text dark px-4" aria-current="page" href="/dr">Appointments</a>
+          </li> {% endcomment %}
+        {% endif %}
          
           
          
         </ul>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated%}
+          {% if request.user.userprofile.role == 'Patient'%}
+            <a class="nav-link active" aria-current="page" href="/Appointments"><button type="button" class="btn btn-primary position-relative">
+              My Appointments
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{request.user.appointmentmade_set.count}}
+                <span class="visually-hidden">unread messages</span>
+              </span>
+            </button></a>
+          {% else %}
+            <a class="nav-link active" aria-current="page" href="/dr"><button type="button" class="btn btn-primary position-relative">
+              Pending Appointments
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{request.user.appointments_set.count}}
+                <span class="visually-hidden">unread messages</span>
+              </span>
+            </button></a>
+          {% endif %}
           <a href="/Logout" class="mx-4"><button type="button" class="btn btn-outline-danger">Logout</button></a>
         {% else %}
           <a href="/Register" class="mx-4"><button type="button" class="btn btn-primary">Register</button></a>

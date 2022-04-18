@@ -1,5 +1,6 @@
-from multiprocessing import context
-from ntpath import join
+from datetime import datetime
+from time import time
+from .models import AppointmentMade, Appointments, UserProfile, MyUser
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import RegisterationForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
@@ -15,12 +16,35 @@ def index(request):
 
 @login_required(login_url='login')
 def doctor(request):
-    return render(request, 'dr.html')
+    appointMentList = request.user.appointments_set.all()
+    return render(request, 'appointmentsMade.html', {'Appointments': appointMentList, 'User': request.user.userprofile.role})
+
+
+@login_required(login_url='login')
+def appoint(request):
+    # appointMentList = AppointmentMade.objects.filter(user = request.user)
+    appointMentList = request.user.appointmentmade_set.all()
+    return render(request, 'appointmentsMade.html', {'Appointments': appointMentList, 'User': request.user.userprofile.role})
 
 
 @login_required(login_url='login')
 def patient(request):
-    return render(request, 'patient.html')
+    if request.method == 'POST':
+        email = request.POST['email']
+        # doctor_name = request.POST['doctor_name']
+        desc = request.POST['desc']
+        phoneNum = request.POST['phoneNum']
+        doctorEmail = request.POST['doctor_name']
+        doctor = MyUser.objects.get(email=doctorEmail)
+        appointMent = Appointments.objects.create(
+            user=doctor, desc=desc, emailField=email, contact=phoneNum, time=datetime.now())
+        appointMentMade = AppointmentMade.objects.create(
+            user=request.user, appointment=appointMent)
+        return redirect('appointList')
+
+    doctorList = UserProfile.objects.filter(role='Doctor')
+    context = {'doctors_list': doctorList}
+    return render(request, 'patient.html', context)
 
 
 def Login(request):
@@ -35,7 +59,11 @@ def Login(request):
             if user is not None:
                 print("User Found")
                 login(request, user)
-                return redirect('home')
+                print(user.userprofile.role)
+                if user.userprofile.role == 'Patient':
+                    return redirect('patientPage')
+                else:
+                    return redirect('doctorPage')
             else:
                 print("User Not Found")
                 return redirect('register')
@@ -48,11 +76,15 @@ def Login(request):
 
 def Register(request):
     if request.method == 'POST':
+        role = request.POST['selectInputData']
         form = RegisterationForm(request.POST)
         print("********", form.errors, "************")
         if form.is_valid():
-            form.save()
-            print("success")
+            user = form.save()
+            userProfile = UserProfile.objects.create(user=user, role=role)
+            print(user)
+            print("*****")
+            print(userProfile)
             return redirect('login')
         else:
             # context{

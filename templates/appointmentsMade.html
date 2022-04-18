@@ -1,0 +1,34 @@
+{% extends 'index.html' %} {% load static %} {% block title %}Appointments
+Made{%endblock title %} {% block content %}
+<div class="container">
+  <h3 class="rounded-3 border border-3 d-inline-flex p-3 col-4">
+    These are your Appointments
+  </h3>
+  <p class="my-3">{{request.user.userprofile.role}}</p>
+  <p class="my-3">{{request.user.email}}</p>
+  {% if request.user.userprofile.role == 'Patient' %} 
+        {% for appointment in Appointments%}
+            <div class="card">
+                <div class="card-header">{{appointment.appointment.emailField}}</div>
+                <div class="card-body">
+                <h5 class="card-title">{{appointment.user.username}}</h5>
+                <p class="card-text">{{appointment.appointment.desc}}</p>
+                <div class="btn btn-primary">We will let you know shortly</div>
+                </div>
+            </div>
+        {% endfor %} 
+  {% else %} 
+        {% for appointment in Appointments%}
+            <div class="card">
+                <div class="card-header">{{appointment.emailField}}</div>
+                <div class="card-body">
+                <h5 class="card-title">{{appointment.user.username}}</h5>
+                <p class="card-text">{{appointment.desc}}</p>
+                <a href="#" class="btn btn-primary">Reject</a>
+                </div>
+            </div>
+        {% endfor %} 
+  {% endif %}
+</div>
+
+{% endblock content%}
