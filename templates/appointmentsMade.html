@@ -7,27 +7,33 @@ Made{%endblock title %} {% block content %}
   <p class="my-3">{{request.user.userprofile.role}}</p>
   <p class="my-3">{{request.user.email}}</p>
   {% if request.user.userprofile.role == 'Patient' %} 
-        {% for appointment in Appointments%}
-            <div class="card">
-                <div class="card-header">{{appointment.appointment.emailField}}</div>
-                <div class="card-body">
-                <h5 class="card-title">{{appointment.user.username}}</h5>
-                <p class="card-text">{{appointment.appointment.desc}}</p>
-                <div class="btn btn-primary">We will let you know shortly</div>
-                </div>
+      {% for appointment in Appointments%}
+          <div class="card">
+            <div class="card-header">{{appointment.appointment.emailField}}</div>
+            <div class="card-body">
+              <h5 class="card-title">{{appointment.user.username}}</h5>
+              <p class="card-title">Doctor's Name : {{appointment.appointment.user.username}}</p>
+              <p class="card-text">{{appointment.appointment.desc}}</p>
+              <span class="border border-3 rounded text-wrap px-1 py-1 border-success">We will let you know shortly</span>
+              <a href="{% url 'deleteAppointment' ap_id=appointment.appointment.id %}" class="btn btn-danger position-absolute top-0 end-0 me-2 mt-5">Remove</a>
             </div>
-        {% endfor %} 
+          </div>
+          <br>
+      {% endfor %}
   {% else %} 
-        {% for appointment in Appointments%}
-            <div class="card">
-                <div class="card-header">{{appointment.emailField}}</div>
-                <div class="card-body">
-                <h5 class="card-title">{{appointment.user.username}}</h5>
-                <p class="card-text">{{appointment.desc}}</p>
-                <a href="#" class="btn btn-primary">Reject</a>
-                </div>
+      {% for appointment in Appointments%}
+          <div class="card">
+            <div class="card-header">{{appointment.emailField}}</div>
+            <div class="card-body">
+              <h5 class="card-title">{{appointment.patient_name}}</h5>
+              <p class="card-title">Doctor's Name : {{appointment.user.username}}</p>
+              <p class="card-text">{{appointment.desc}}</p>
+              <a href="{% url 'acceptAppointment' ap_id=appointment.id %}" class="btn btn-success">Accept</a>
+              <a href="{% url 'deleteAppointment' ap_id=appointment.id %}" class="btn btn-danger">Reject</a>
             </div>
-        {% endfor %} 
+          </div>
+          <br>
+      {% endfor %}
   {% endif %}
 </div>
 

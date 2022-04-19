@@ -3,9 +3,7 @@ from pickle import TRUE
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from phonenumber_field.formfields import PhoneNumberField
 from .manager import CustomUserManager
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
 # Create your models here.
 ROLES = (
 
@@ -44,6 +42,7 @@ class Appointments(models.Model):
     contact = models.CharField(
         _("Phone No"), max_length=12)
     time = models.DateTimeField()
+    patient_name = models.CharField(max_length=100, null=False)
 
 
 class AppointmentMade(models.Model):

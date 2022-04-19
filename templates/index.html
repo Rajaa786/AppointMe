@@ -21,12 +21,12 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item mx-3">
-            <a class="nav-link active rounded-pill bg-warning text-dark px-5" aria-current="page" href="/">Home</a>
+          <li class="nav-item mx-3 px-5 bg-warning text-dark rounded-pill">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
         {% if user.is_authenticated and request.user.userprofile.role == 'Patient' %}
-          <li class="nav-item mx-3">
-            <a class="nav-link active rounded-pill bg-warning text-dark px-5" aria-current="page" href="/patient">
+          <li class="nav-item mx-3 px-5 bg-warning text-dark rounded-pill">
+            <a class="nav-link active" aria-current="page" href="/patient">
               Book Slot
             </a>
           </li>
@@ -68,6 +68,7 @@
   </nav>
   {% block content %}
   <div> This is Home Page</div>
+  <div class="img-fluid"><img src="../static/images/download.jpg"></div>
   {% endblock content %}
 
     <!-- Optional JavaScript; choose one of the two! -->

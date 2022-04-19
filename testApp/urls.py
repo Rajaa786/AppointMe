@@ -11,5 +11,7 @@ urlpatterns = [
     path('Register/', views.Register, name='register'),
     path('Logout/', views.Logout_, name='logout'),
     path('Appointments/', views.appoint, name='appointList'),
+    path('accept/<int:ap_id>/', views.acceptAppointment, name='acceptAppointment'),
+    path('delete/<int:ap_id>', views.deleteAppointment, name='deleteAppointment'),
 
 ]

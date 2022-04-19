@@ -1,5 +1,5 @@
 from datetime import datetime
-from time import time
+from django.core.mail import send_mail
 from .models import AppointmentMade, Appointments, UserProfile, MyUser
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import RegisterationForm, LoginForm
@@ -7,6 +7,32 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import json
 # Create your views here.
+
+
+@login_required(login_url='login')
+def acceptAppointment(request, ap_id):
+    appointment = Appointments.objects.get(id=ap_id)
+    send_mail(
+        subject='Appointment Booked',
+        message=appointment.desc,
+        from_email='rajsingh08471@gmail.com',
+        recipient_list=[appointment.emailField],
+    )
+    appointment.delete()
+    if request.user.userprofile == 'Patient':
+        return redirect('appointList')
+    else:
+        return redirect('doctorPage')
+
+
+@login_required(login_url='login')
+def deleteAppointment(request, ap_id):
+    appointment = Appointments.objects.get(id=ap_id).delete()
+    if request.user.userprofile.role == 'Patient':
+        print("HERE")
+        return redirect('appointList')
+    else:
+        return redirect('doctorPage')
 
 
 @login_required(login_url='login')
@@ -37,7 +63,7 @@ def patient(request):
         doctorEmail = request.POST['doctor_name']
         doctor = MyUser.objects.get(email=doctorEmail)
         appointMent = Appointments.objects.create(
-            user=doctor, desc=desc, emailField=email, contact=phoneNum, time=datetime.now())
+            user=doctor, desc=desc, emailField=email, contact=phoneNum, time=datetime.now(), patient_name=request.user.username)
         appointMentMade = AppointmentMade.objects.create(
             user=request.user, appointment=appointMent)
         return redirect('appointList')
